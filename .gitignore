@@ -5,3 +5,4 @@ test.py
 __pycache__/
 lstm_logs/
 model/
+.DS_Store
