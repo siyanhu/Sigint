@@ -42,7 +42,7 @@ def train_and_evaluate(args):
     device = get_device()
     print(f"Using device: {device}")
     model = IMULSTMModel(args.input_size, args.hidden_sizes, args.output_size, args.dropout_rate).to(device)
-    criterion = torch.nn.L1Loss()
+    criterion = torch.nn.MSELoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=args.learning_rate)
     scheduler = ReduceLROnPlateau(optimizer, mode='min', factor=0.1, patience=5, min_lr=1e-6) #change
 
@@ -175,8 +175,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Train and evaluate LSTM model for IMU data")
     parser.add_argument("--root_dir", type=str, default="./processed/no_transform/train/path1", help="Root directory of the training dataset") #change
     parser.add_argument("--sequence_length", type=int, default=100, help="Sequence length for LSTM input")
-    parser.add_argument("--input_size", type=int, default=3, help="Number of features in IMU data")
-    parser.add_argument("--hidden_sizes", type=int, nargs='+', default=[64, 32], help="Hidden sizes of LSTM layers") #change
+    parser.add_argument("--input_size", type=int, default=3, help="Number of features in IMU data") #change
+    parser.add_argument("--hidden_sizes", type=int, nargs='+', default=[64, 32], help="Hidden sizes of LSTM layers") 
     parser.add_argument("--output_size", type=int, default=2, help="Output size (x, y)") #change
     parser.add_argument("--learning_rate", type=float, default=0.001, help="Learning rate")
     parser.add_argument("--batch_size", type=int, default=32, help="Batch size")
