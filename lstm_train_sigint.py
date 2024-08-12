@@ -35,6 +35,8 @@ def train_and_evaluate(args):
     writer.add_text("Dataset Info", f"Train samples: {len(train_dataset)}, Val samples: {len(val_dataset)}")
     writer.add_text("Input Shape", str(train_dataset[0][0].shape))
     writer.add_text("Target Shape", str(train_dataset[0][1].shape))
+    writer.add_text("Transform", str(args.transform))
+
 
     # Initialize the model, loss function, and optimizer
     device = get_device()
@@ -42,7 +44,7 @@ def train_and_evaluate(args):
     model = IMULSTMModel(args.input_size, args.hidden_sizes, args.output_size, args.dropout_rate).to(device)
     criterion = torch.nn.MSELoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=args.learning_rate)
-    scheduler = ReduceLROnPlateau(optimizer, mode='min', factor=0.1, patience=5, min_lr=1e-6)
+    scheduler = ReduceLROnPlateau(optimizer, mode='min', factor=0.1, patience=5, min_lr=1e-6) #change
 
     def mean_baseline_eval(loader, mean_position):
         total_loss = 0
@@ -70,7 +72,7 @@ def train_and_evaluate(args):
 
     # Training loop
     best_val_loss = float('inf')
-    early_stopping_counter = 0
+    early_stopping_counter = 0 #change
     early_stopping_patience = 20
     
     for epoch in range(args.num_epochs):
@@ -101,7 +103,7 @@ def train_and_evaluate(args):
         
         train_loss /= len(train_loader)
         val_loss /= len(val_loader)
-        val_mae /= len(val_loader)
+        val_mae /= len(val_loader) #change
         
         
         print(f'Epoch [{epoch+1}/{args.num_epochs}], Train Loss: {train_loss:.4f}, Val Loss: {val_loss:.4f}, Val MAE: {val_mae:.4f}')
