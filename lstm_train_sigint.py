@@ -165,7 +165,7 @@ def train_and_evaluate(args):
     print(f"Test results logged to TensorBoard in {log_dir}")
     
     #save the model 
-    torch.save(model.cpu().state_dict(), f'./model/lstm_model_transform_{args.transform}_acc_{overall_mae:.4f}.pth')
+    torch.save(model.cpu().state_dict(), f'./model/lstm_model_length_{args.sequence_length}_transform_{args.transform}_{overall_mae:.4f}.pth')
 
     writer.close()
 
