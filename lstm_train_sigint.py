@@ -16,7 +16,7 @@ def get_device():
 def train_and_evaluate(args):
     # Create a custom log directory name
     current_time = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
-    log_dir = os.path.join("./lstm_logs", f"{current_time}_input{args.input_size}_hidden{'-'.join(map(str, args.hidden_sizes))}_output{args.output_size}_lr{args.learning_rate}_batch{args.batch_size}_dropout{args.dropout_rate}_sequencelength{args.sequence_length}")    
+    log_dir = os.path.join("./lstm_logs", f"{current_time}_input{args.input_size}_hidden{'-'.join(map(str, args.hidden_sizes))}_output{args.output_size}_lr{args.learning_rate}_batch{args.batch_size}_dropout{args.dropout_rate}_sequencelength{args.sequence_length}_transform{args.transform}")    
     writer = SummaryWriter(log_dir)
 
     # Load data
@@ -30,6 +30,7 @@ def train_and_evaluate(args):
     print(f"Target shape: {train_dataset[0][1].shape}")
     print(f"Number of training batches: {len(train_loader)}")
     print(f"Number of validation batches: {len(val_loader)}")
+    print(f"Transform: {args.transform}")
 
     writer.add_text("Dataset Info", f"Train samples: {len(train_dataset)}, Val samples: {len(val_dataset)}")
     writer.add_text("Input Shape", str(train_dataset[0][0].shape))
@@ -162,7 +163,7 @@ def train_and_evaluate(args):
     print(f"Test results logged to TensorBoard in {log_dir}")
     
     #save the model 
-    torch.save(model.cpu().state_dict(), f'./model/lstm_model_{overall_mae:.4f}.pth')
+    torch.save(model.cpu().state_dict(), f'./model/lstm_model_transform_{args.transform}_acc_{overall_mae:.4f}.pth')
 
     writer.close()
 
@@ -179,6 +180,7 @@ if __name__ == "__main__":
     parser.add_argument("--dropout_rate", type=float, default=0.2, help="Dropout rate")
     parser.add_argument("--model_save_path", type=str, default="./model/best_imu_lstm_model.pth", help="Path to save the best model")
     parser.add_argument("--test_root_dir", type=str, default="./processed/no_transform/test/path2", help="Root directory of the test dataset") #change
-
+    parser.add_argument("--transform", type=bool, default=False, help="Root directory of the test dataset") #change
+   
     args = parser.parse_args()
     train_and_evaluate(args)
