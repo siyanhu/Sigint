@@ -85,6 +85,7 @@ def train_and_evaluate(args):
             
             optimizer.zero_grad()
             loss.backward()
+            torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0) #change
             optimizer.step()
             
             train_loss += loss.item()
