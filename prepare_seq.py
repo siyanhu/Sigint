@@ -68,7 +68,6 @@ def load_sequences(root_dir, sequence_length):
 
 
 def prepare_data(root_dir, sequence_length, batch_size):
-    #root_dir: 'hkust4f/train/path2'
     
     all_sequences = load_sequences(root_dir, sequence_length)
     train_sequences, val_sequences = train_test_split(all_sequences, test_size=0.1, random_state=42)
@@ -81,5 +80,4 @@ def prepare_data(root_dir, sequence_length, batch_size):
 
     return train_loader, val_loader, train_dataset, val_dataset
 
-# root_dir = 'processed/train/path2'
-# prepare_data(root_dir, 200, 32)
+
