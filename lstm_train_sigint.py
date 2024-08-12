@@ -42,7 +42,7 @@ def train_and_evaluate(args):
     device = get_device()
     print(f"Using device: {device}")
     model = IMULSTMModel(args.input_size, args.hidden_sizes, args.output_size, args.dropout_rate).to(device)
-    criterion = torch.nn.MSELoss()
+    criterion = torch.nn.L1Loss()
     optimizer = torch.optim.Adam(model.parameters(), lr=args.learning_rate)
     scheduler = ReduceLROnPlateau(optimizer, mode='min', factor=0.1, patience=5, min_lr=1e-6) #change
 
@@ -85,7 +85,6 @@ def train_and_evaluate(args):
             
             optimizer.zero_grad()
             loss.backward()
-            torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0) #change
             optimizer.step()
             
             train_loss += loss.item()
@@ -174,7 +173,7 @@ def train_and_evaluate(args):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Train and evaluate LSTM model for IMU data")
-    parser.add_argument("--root_dir", type=str, default="./processed/no_transform/train/path2", help="Root directory of the training dataset") #change
+    parser.add_argument("--root_dir", type=str, default="./processed/no_transform/train/path1", help="Root directory of the training dataset") #change
     parser.add_argument("--sequence_length", type=int, default=100, help="Sequence length for LSTM input")
     parser.add_argument("--input_size", type=int, default=3, help="Number of features in IMU data")
     parser.add_argument("--hidden_sizes", type=int, nargs='+', default=[64, 32], help="Hidden sizes of LSTM layers") #change
@@ -184,8 +183,8 @@ if __name__ == "__main__":
     parser.add_argument("--num_epochs", type=int, required=True, help="Number of epochs")
     parser.add_argument("--dropout_rate", type=float, default=0.2, help="Dropout rate")
     parser.add_argument("--model_save_path", type=str, default="./model/best_imu_lstm_model.pth", help="Path to save the best model")
-    parser.add_argument("--test_root_dir", type=str, default="./processed/no_transform/test/path2", help="Root directory of the test dataset") #change
-    parser.add_argument("--transform", type=bool, default=False, help="Root directory of the test dataset") #change
+    parser.add_argument("--test_root_dir", type=str, default="./processed/no_transform/test/path1", help="Root directory of the test dataset") #change
+    parser.add_argument("--transform", type=bool, default=False, help="Transform or not") #change
    
     args = parser.parse_args()
     train_and_evaluate(args)
