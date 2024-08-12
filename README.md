@@ -1,14 +1,16 @@
 # Sigint
 1. Data Preparation
 
-   download all folders starting with HKUST_fusion_4F
+   download all folders starting with HKUST_fusion_4F from the following link
+
+   https://hkustconnect-my.sharepoint.com/personal/shuas_connect_ust_hk/_layouts/15/onedrive.aspx?ga=1&isAscending=true&id=%2Fpersonal%2Fshuas%5Fconnect%5Fust%5Fhk%2FDocuments%2F%5BProject%5D%5BARKit%20Survey%5D%2Fsurvey%5Fdata%2FHkust%5F20240807&sortField=LinkFilename
 
    store them under root_dir/path_num/
 
    run `python preprocess.py`
 
 
-2. Train & Test
+3. Train & Test
 
    files under src are not modified
    
