@@ -21,7 +21,7 @@ def load_data(root_dir):
         if os.path.isdir(folder_path):
             
             imu = pd.read_csv(os.path.join(folder_path, 'mag.csv')).iloc[1:, 1:].values #change
-            vi = pd.read_csv(os.path.join(folder_path, 'gt.csv')).iloc[1:, 2:].values #change
+            vi = pd.read_csv(os.path.join(folder_path, 'gt.csv')).iloc[1:, 1:].values #change
             sequences.append(IMUSequence(imu, vi, f"{data_folder}"))
             
     return sequences

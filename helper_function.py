@@ -272,3 +272,30 @@ def output_check(matched_idxes, full_mag_data, gt_data, syn_gt_data, syn_mag_dat
 
 
 
+def read_tap(tap_file_path):
+  data = np.loadtxt(tap_file_path, delimiter=',', ndmin=2)
+
+  tap_data = {
+      'ts': data[:, 0].tolist(),
+      'x': data[:, 1].tolist(),
+      'y': data[:, 2].tolist()
+  }
+
+  return tap_data
+
+
+def read_all_tap(all_dirs):
+    all_tap_data = []
+    for folder_dir in all_dirs:
+        tap_file_path = os.path.join(folder_dir, "Gt", "taps.txt")
+
+        try:
+            tap_data = read_tap(tap_file_path)
+            all_tap_data.append(tap_data)
+            print(f"Processed {folder_dir}: {len(tap_data['ts'])} taps")
+
+        except Exception as e:
+            print(f"Error processing {folder_dir}: {str(e)}")
+
+    print(f"Total folders processed: {len(all_tap_data)}")
+    return all_tap_data

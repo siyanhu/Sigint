@@ -10,23 +10,20 @@ def get_device():
 
 
 class IMUSequence:
-    def __init__(self, imu_file, vi_file, sequence_length):
+    def __init__(self, imu_file, vi_file, sequence_length, stride):
         imu_data = pd.read_csv(imu_file).iloc[1:, 1:].values
-        vi_data = pd.read_csv(vi_file).iloc[1:, 2:].values  # Only y, z
+        vi_data = pd.read_csv(vi_file).iloc[1:, 1:].values  # change
 
         self.sequences = []
         self.targets = []
 
-        for i in range(0, len(imu_data) - sequence_length, sequence_length):
+        for i in range(0, len(imu_data) - sequence_length, stride):
             self.sequences.append(imu_data[i:i+sequence_length])
             self.targets.append(vi_data[i+sequence_length])
 
         self.sequences = np.array(self.sequences)
         self.targets = np.array(self.targets)
-        
-        # print(self.sequences[0][0].dtype)
-        # print(self.sequences[0][0][0].dtype)
-        # print(self.sequences[0][0])
+       
        
 
 class IMUDataset(Dataset):
@@ -53,7 +50,7 @@ class IMUDataset(Dataset):
                 torch.FloatTensor(self.targets[idx]).to(self.device))
         
         
-def load_sequences(root_dir, sequence_length):
+def load_sequences(root_dir, sequence_length, stride):
     sequences = []
     for data_folder in os.listdir(root_dir):
         folder_path = os.path.join(root_dir, data_folder)
@@ -62,14 +59,15 @@ def load_sequences(root_dir, sequence_length):
             sequences.append(IMUSequence(
                 os.path.join(folder_path, 'mag.csv'),
                 os.path.join(folder_path, 'gt.csv'),
-                sequence_length
+                sequence_length,
+                stride
             ))
     return sequences
 
 
-def prepare_data(root_dir, sequence_length, batch_size):
+def prepare_data(root_dir, sequence_length, batch_size, stride):
     
-    all_sequences = load_sequences(root_dir, sequence_length)
+    all_sequences = load_sequences(root_dir, sequence_length, stride)
     train_sequences, val_sequences = train_test_split(all_sequences, test_size=0.1, random_state=42)
 
     train_dataset = IMUDataset(train_sequences)
